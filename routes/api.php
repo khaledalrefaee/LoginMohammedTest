@@ -27,25 +27,20 @@ Route::post('/login',[AuthController::class,'login']);
 Route::post('/logout',[AuthController::class,'logout']);
 
 
-// Route::get('/posts',[PostController::class,'index']);
-Route::get('/posts/show/{id}',[PostController::class,'show']);
-
 //search
 Route::get('/post/search/{title}',[PostController::class,'search']);
 
 
-// Route::post('/post/store',[PostController::class,'store']);
-// Route::post('/post/update/{id}',[PostController::class,'updata']);
-// Route::post('/post/delete/{id}',[PostController::class,'destroy']);
 
 
-
+Route::get('/posts',[PostController::class,'index']);
+Route::get('/posts/show/{id}',[PostController::class,'show']);
+Route::post('/post/store',[PostController::class,'store']);
+Route::post('/post/update/{id}',[PostController::class,'updata']);
+Route::post('/post/delete/{id}',[PostController::class,'destroy']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('/posts',[PostController::class,'index']);
-    Route::post('/post/store',[PostController::class,'store']);
-    Route::post('/post/update/{id}',[PostController::class,'updata']);
-    Route::post('/post/delete/{id}',[PostController::class,'destroy']);
+    Route::get('/profail',[AuthController::class,'userProfile']);
 
 });
 
