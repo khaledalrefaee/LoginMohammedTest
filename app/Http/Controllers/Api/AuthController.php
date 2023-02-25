@@ -20,11 +20,9 @@ class AuthController extends Controller
             'email'      =>$filds['email'],
             'password'   => bcrypt($filds['password'])
         ]);
-        $token =$user->createToken('myappToken')->plainTextToken;
 
         $respons=[
             'user'=>$user,
-            'token' =>$token
         ];
 
         return response($respons,201);
@@ -35,8 +33,8 @@ class AuthController extends Controller
             'email'     => 'required|string',
             'password'  =>'required|string'
         ]);
-        
-    
+
+
         //check email
         $user = User::where('email',$filds['email'])->first();
 
