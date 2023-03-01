@@ -12,8 +12,10 @@ class PostResource extends JsonResource
         // شو هنن يلي بدي ياهم يروح معيى
         return [
             'id' => $this->id,
-            'title' => $this->title,
-            'body' => $this->body,
+            'name' => $this->name,
+            'description' => $this->description,
+            'price' => $this->price,
+            'image' => $this->image,
         ];
     }
 }

@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PostResource;
 use App\Models\Posts;
+use App\Models\Products;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -16,18 +18,18 @@ class PostController extends Controller
 
     public function index()
     {
-        // resource مشان شغل ال 
-        $posts =PostResource::collection(Posts::get());
-        return $this->ApiResponse($posts,'ok' , 200);
+        // resource مشان شغل ال
+        $products =PostResource::collection(Products::get());
+        return $this->ApiResponse($products,'ok' , 200);
     }
 
 
         public function show($id)
         {
-            $post = Posts::find($id);
-            if($post){
-                // وانت راجع عميل عملية التحويل 
-                return $this->ApiResponse(new PostResource($post),'ok',200);
+            $product = Products::find($id);
+            if($product){
+                // وانت راجع عميل عملية التحويل
+                return $this->ApiResponse(new PostResource($product),'ok',200);
             }
             return $this->ApiResponse(null,'not found',404);
         }
@@ -37,23 +39,34 @@ class PostController extends Controller
     public  function store(Request $request){
 
         $validator=validator::make($request->all(),[
-
-            'title' =>'required|max:200',
-            'body' => 'required',
+            'name'              =>  'required|max:200',
+            'description'       =>  'required',
+            'price'             =>  'required',
         ]);
 
         if( $validator->fails()){
             return $this->ApiResponse(null,$validator->errors(),400);
         }
 
-            $post= Posts::create([
-            'title' => $request->title,
-            'body'  =>$request->body
+        $filename ="";
+            if($request->hasFile('image')) {
+                $filename = $request->file('image')->store('Products', 'public');
+                }
+            else{
+                $filename=Null;
+            }
+          $product= Products::create([
+            'user_id' =>  Auth::id(),
+            'name'          =>      $request->name,
+            'description'   =>      $request->description,
+            'price'         =>      $request->price,
+            'image'         =>      $request->image,
         ]);
-        if($post){
-            return $this->ApiResponse(new PostResource($post),'the post create',201);
+
+        if($product){
+            return $this->ApiResponse(new PostResource($product),'the post create',201);
         }
-        // return $this->ApiResponse(null,'the post not sasveing ',400);
+         return $this->ApiResponse(null,'the post not sasveing ',400);
    }
 
 
@@ -61,7 +74,7 @@ class PostController extends Controller
 
 
     public function updata(Request $request , $id){
-      
+
         $validator=validator::make($request->all(),[
 
             'title' =>'required|max:200',
@@ -71,7 +84,7 @@ class PostController extends Controller
         if( $validator->fails()){
             return $this->ApiResponse(null,$validator->errors(),400);
         }
-        
+
         $post = Posts::find($id);
         if(!$post){
             return $this->ApiResponse(null,' the post not found',404);
