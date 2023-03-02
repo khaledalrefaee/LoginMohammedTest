@@ -28,19 +28,20 @@ Route::post('/logout',[AuthController::class,'logout']);
 
 
 //search
-Route::get('/post/search/{title}',[PostController::class,'search']);
+Route::get('/post/search/{name}',[PostController::class,'search']);
 
 
 
 
 Route::get('/posts',[PostController::class,'index']);
 Route::get('/posts/show/{id}',[PostController::class,'show']);
-Route::post('/post/update/{id}',[PostController::class,'updata']);
 Route::post('/post/delete/{id}',[PostController::class,'destroy']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/profail',[AuthController::class,'userProfile']);
     Route::post('/post/store',[PostController::class,'store']);
+    Route::post('/post/update/{id}',[PostController::class,'updata']);
+
 
 });
 
